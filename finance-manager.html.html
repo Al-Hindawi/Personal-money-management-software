@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدير الأموال الشخصي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        // كود React الخاص بك هنا
+        const { useState } = React;
+
+        function App() {
+          const [transactions, setTransactions] = useState([]);
+          
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            alert(`تم إضافة حركة: ${formData.get('amount')} دينار`);
+          };
+
+          return (
+            <div className="min-h-screen bg-gray-50 text-gray-900 font-sans p-6">
+              <header className="max-w-6xl mx-auto flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-extrabold">مدير الأموال الشخصي</h1>
+                <div className="flex gap-3 items-center">
+                  <div className="text-sm text-gray-500">Light Mode</div>
+                  <button className="px-3 py-1 rounded-md bg-indigo-600 text-white text-sm">تجربة سريعة</button>
+                </div>
+              </header>
+
+              <main className="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+                {/* النموذج */}
+                <section className="col-span-4 bg-white rounded-2xl shadow p-4">
+                  <h2 className="font-semibold mb-3">أضف حركة مالية</h2>
+                  <form className="space-y-3" onSubmit={handleSubmit}>
+                    <div>
+                      <label className="block text-sm mb-1">التاريخ</label>
+                      <input type="date" name="date" className="w-full border px-3 py-2 rounded" defaultValue={new Date().toISOString().slice(0, 10)} />
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">نوع الحركة</label>
+                      <select name="type" className="w-full border px-3 py-2 rounded">
+                        <option value="withdraw">سحب</option>
+                        <option value="add">إضافة</option>
+                        <option value="return">إرجاع</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">الصندوق</label>
+                      <select name="fund" className="w-full border px-3 py-2 rounded">
+                        <option value="operational">تشغيلي</option>
+                        <option value="savings">ادخار وطوارئ</option>
+                        <option value="development">تطوير ذاتي</option>
+                        <option value="vault">الخزنة</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">المكان</label>
+                      <select name="location" className="w-full border px-3 py-2 rounded">
+                        <option value="wallet">محفظة</option>
+                        <option value="envelope">ظرف</option>
+                        <option value="e-wallet">محفظة إلكترونية</option>
+                        <option value="vault">خزنة</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">المبلغ (دينار)</label>
+                      <input type="number" name="amount" className="w-full border px-3 py-2 rounded" />
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">الغرض / السبب</label>
+                      <input name="purpose" className="w-full border px-3 py-2 rounded" />
+                    </div>
+                    <div className="flex gap-2">
+                      <button type="submit" className="flex-1 py-2 rounded bg-green-600 text-white">حفظ الحركة</button>
+                      <button type="button" className="flex-1 py-2 rounded border">إلغاء</button>
+                    </div>
+                  </form>
+                </section>
+
+                {/* Dashboard */}
+                <section className="col-span-8 space-y-4">
+                  <div className="grid grid-cols-4 gap-4">
+                    <Card title="تشغيلي" value="60,000 د.ع" color="bg-blue-100" />
+                    <Card title="ادخار وطوارئ" value="118,000 د.ع" color="bg-green-100" />
+                    <Card title="تطوير ذاتي" value="35,000 د.ع" color="bg-orange-100" />
+                    <Card title="الخزنة" value="200,000 د.ع" color="bg-purple-100" />
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow p-4">
+                    <h3 className="font-semibold mb-3">توزيع الأموال</h3>
+                    <div className="h-60 flex items-center justify-center text-gray-400">
+                      رسم بياني (Chart.js)
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow p-4">
+                    <h3 className="font-semibold mb-3">ملخص الأماكن</h3>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="p-3 border rounded">محفظة<br /><strong>35,000</strong></div>
+                      <div className="p-3 border rounded">ظرف<br /><strong>90,000</strong></div>
+                      <div className="p-3 border rounded">محفظة إلكترونية<br /><strong>53,000</strong></div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* الحركات */}
+                <section className="col-span-12 bg-white rounded-2xl shadow p-4">
+                  <h3 className="font-semibold mb-3">سجل الحركات</h3>
+                  <table className="w-full text-sm">
+                    <thead className="text-right text-gray-500">
+                      <tr><th>التاريخ</th><th>نوع</th><th>الصندوق</th><th>المكان</th><th>المبلغ</th><th>الغرض</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-t"><td>2025-11-07</td><td>سحب</td><td>تشغيلي</td><td>محفظة</td><td>5,000</td><td>شراء لوحة</td></tr>
+                      <tr className="border-t"><td>2025-11-13</td><td>إرجاع</td><td>تشغيلي</td><td>ظرف</td><td>35,000</td><td>إعادة مبلغ</td></tr>
+                    </tbody>
+                  </table>
+                </section>
+              </main>
+
+              <footer className="max-w-6xl mx-auto text-center text-xs text-gray-400 mt-8">
+                نسخة تجريبية - يعمل مباشرة في المتصفح
+              </footer>
+            </div>
+          );
+        }
+
+        function Card({ title, value, color }) {
+          return (
+            <div className={`p-4 rounded-2xl shadow flex flex-col justify-between ${color}`}>
+              <div className="text-sm text-gray-600">{title}</div>
+              <div className="text-xl font-bold">{value}</div>
+            </div>
+          );
+        }
+
+        // render التطبيق
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
